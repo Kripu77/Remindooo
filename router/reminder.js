@@ -1,9 +1,12 @@
 const express = require('express');
 const reminder = express.Router();
-const {allReminders, addReminders, updateReminders, deleteReminder} = require('../controllers/reminderHandler')
+const {allReminders, addReminders, updateReminders, deleteReminder, getReminder} = require('../controllers/reminderHandler')
 
 //get route to handle all reminders
 reminder.get("/", allReminders);
+
+//get single reminder
+reminder.get("/:id", getReminder);
 
 //post route to add more reminders;
 reminder.post("/", addReminders)
