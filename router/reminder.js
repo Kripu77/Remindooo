@@ -12,7 +12,7 @@ reminder.get("/:id", getReminder);
 reminder.post("/", addReminders)
 
 //update route to update existing reminders;
-reminder.put("/:id", updateReminders)
+reminder.patch("/:id", updateReminders)
 
 //delete route to delete or mark complete any reminder
 reminder.delete("/:id", deleteReminder)

@@ -1,27 +1,31 @@
-const {Reminders} = require("../models/Reminder")
+const {Reminders} = require("../models/Reminder");
+const wrap = require('express-async-wrapper');
 
 //get reminders
-const allReminders = async (req, res) => {
+const allReminders = wrap(async (req, res) => {
 
     const allReminders = await Reminders.find({})
 
-  if( allReminders == []){
+  if( allReminders.length == 0 ){
  res.status(404).json({ error:"No data found" });
   }
     else{
 res.status(201).json({ success: true, data: allReminders });
     } 
 
-};
+});
 
 //getSingleReminder
-const getReminder = (req, res) => {
-  res.status(201).json({ success: true, data: "The single reminder" });
-};
+const getReminder = wrap(async (req, res) => {
+
+  const data = await Reminders.findOne({_id:req.params.id});
+  console.log(data)
+  res.status(201).json({ success: true, data: data });
+});
 
 
 //add reminders
-const addReminders = async (req, res) => {
+const addReminders = wrap(async (req, res) => {
 
     if(req.body){
 
@@ -35,22 +39,29 @@ const addReminders = async (req, res) => {
         })
     }
 
-};
+});
 
 //update reminders
 
-const updateReminders = (req, res) => {
+const updateReminders = wrap(async(req, res) => {
+console.log(req.params)
+  const data = await Reminders.findOneAndUpdate({_id:req.params.id}, req.body, {
+    new:true, runValidators:true
+  })
   res
     .status(200)
-    .json({ sucess: true, data: "User is trying to update the reminder" });
-};
+    .json({ sucess: true, data: data });
+});
 
 //delete a reminder or mark as complete
-const deleteReminder = (req, res) => {
+const deleteReminder = wrap(async(req, res) => {
+
+
+  const data = await Reminders.findOneAndDelete({_id:req.params.id})
   res
     .status(201)
-    .json({ success: true, data: "User is trying to delete a reminder" });
-};
+    .json({ success: true, data: data });
+});
 
 module.exports = {
   allReminders,
